@@ -22,9 +22,9 @@ def word_test(word_list_dic, reverse):
     words = list(word_list_dic.keys())
     shuffle(words)
 
-    for word in words:
+    for i, word in enumerate(words):
         print ("===========")
-        print (word_list_dic[word] if reverse else word)
+        print ("%s. %s" % (i+1, word_list_dic[word] if reverse else word))
         input()
         print (word if reverse else word_list_dic[word])
         print ("===========")
@@ -33,7 +33,7 @@ def word_test(word_list_dic, reverse):
 def main():
     option = OptionParser("Usage: %prog ")
     option.add_option("-f", "--file", dest="file_path", help="word file location")
-    option.add_option("-r", "--reverse", dest="reverse", action="store_true", help="word file location")
+    option.add_option("-r", "--reverse", dest="reverse", action="store_true", help="word & meaning reverse")
 
     (options, _) = option.parse_args()
 
