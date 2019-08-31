@@ -36,14 +36,15 @@ def word_test(word_list_dic, reverse):
         print ("\n")
 
 def main():
-    option = OptionParser("Usage: %prog ")
-    option.add_option("-f", "--file", dest="file_path", help="word file location")
-    option.add_option("-r", "--reverse", dest="reverse", action="store_true", help="word & meaning reverse")
-    option.add_option("-d", "--directory", dest="directory_path", help="word file directy")
+    parser = OptionParser("Usage: %prog ")
+    parser.add_option("-f", "--file", dest="file_path", help="word file location")
+    parser.add_option("-r", "--reverse", dest="reverse", action="store_true", help="word & meaning reverse")
+    parser.add_option("-d", "--directory", dest="directory_path", help="word file directy")
 
-    (options, _) = option.parse_args()
+    (options, _) = parser.parse_args()
 
     if options.file_path and options.directory_path:
+        parser.print_help()
         exit(1)
     elif options.file_path:
         word_test(get_word_list(options.file_path), options.reverse)
@@ -53,6 +54,9 @@ def main():
             word_list.update(get_word_list(word_file))
 
         word_test(word_list, options.reverse)
+    else:
+        parser.print_help()
+        exit(1)
 
 
 if __name__ == "__main__":
