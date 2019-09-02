@@ -16,7 +16,7 @@ def get_word_list(file_path):
                 continue
 
             if not word:
-                print ("Error: %s" %  word)
+                print (f"Error: {word}")
 
     return word_list_dic
 
@@ -32,17 +32,31 @@ def word_test(word_list_dic, reverse, practice_mode):
     words = list(word_list_dic.keys())
     shuffle(words)
 
-    for i, word in enumerate(words):
-        print ("===========")
-        print ("%s. %s" % (i+1, word_list_dic[word] if reverse else word))
-        user_input = input()
-        answer = word if reverse else word_list_dic[word]
-        print (answer)
-        if practice_mode and user_input != answer:
-            practice()
+    total_count = 0
+    answer_count = 0
 
-        print ("===========")
-        print ("\n")
+    try:
+        for i, word in enumerate(words):
+            print ("===========")
+            print (f"{i+1}. {word_list_dic[word] if reverse else word}")
+            user_input = input()
+
+            total_count += 1
+            answer = word if reverse else word_list_dic[word]
+            print (answer)
+
+            if user_input == answer:
+                answer_count += 1
+            elif practice_mode:
+                practice()
+
+            print ("===========")
+            print ("\n")
+    except KeyboardInterrupt:
+        print ("Quit the program")
+    finally:
+        print (f"{answer_count}/{total_count} ({answer_count/total_count*100:.1f}%)")
+
 
 def main():
     parser = OptionParser("Usage: %prog ")
