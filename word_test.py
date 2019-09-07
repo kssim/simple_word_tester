@@ -6,6 +6,11 @@ from random import shuffle
 from glob import glob
 
 
+def save_word_list(file_path, word_list):
+    with open(file_path, "a") as f:
+        for word, explanation in word_list.items():
+            f.write(f"{word} = {explanation}\n")
+
 def get_word_list(file_path):
     word_list_dic = {}
     with open(file_path, "r") as f:
@@ -27,6 +32,18 @@ def practice():
     while True:
         if input() == "n":
             break
+
+def add_word_list(file_path):
+    word_list = {}
+    try:
+        while True:
+            word = input("Input a word : ")
+            explanation = input("Input a explation : ")
+            word_list[word] = explanation
+    except KeyboardInterrupt:
+        print ("Quit the program")
+    finally:
+        save_word_list(file_path, word_list)
 
 def word_test(word_list_dic, reverse, practice_mode):
     words = list(word_list_dic.keys())
@@ -64,12 +81,15 @@ def main():
     parser.add_option("-r", "--reverse", dest="reverse", action="store_true", help="word & meaning reverse")
     parser.add_option("-d", "--directory", dest="directory_path", help="word file directy")
     parser.add_option("-p", "--practice", dest="practice_mode", action="store_true", help="set the practice mode")
+    parser.add_option("-a", "--add_mode", dest="add_mode", action="store_true", help="set the add mode")
 
     (options, _) = parser.parse_args()
 
     if options.file_path and options.directory_path:
         parser.print_help()
         exit(1)
+    elif options.file_path and options.add_mode:
+        add_word_list(options.file_path)
     elif options.file_path:
         word_test(get_word_list(options.file_path), options.reverse, options.practice_mode)
     elif options.directory_path:
