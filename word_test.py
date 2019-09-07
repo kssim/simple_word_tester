@@ -1,10 +1,48 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
+from bs4 import BeautifulSoup
+from urllib.parse import quote
+from urllib.request import urlopen
 
 from optparse import OptionParser
 from random import shuffle
 from glob import glob
 
+BASE_URL = 'http://dic.naver.com/search.nhn'
+
+def get_request_uri(keyword):
+    uri = '?dicQuery=%s&query=%s&target=dic&ie=utf8&query_utf=&isOnlyViewEE=' % (keyword, keyword)
+    return uri
+
+def get_page_source(keyword):
+    response = urlopen(BASE_URL + get_request_uri(keyword))
+    soup = BeautifulSoup(response, 'html.parser')
+    return soup
+
+def parse_page_source(soup):
+    en_dic_section = soup.find('div', class_='en_dic_section')
+
+    source_word = [s_word.span.getText() for s_word in en_dic_section.find_all('dt')]
+    translated_word = [t_word.getText().strip() for t_word in en_dic_section.find_all('dd')]
+
+    return zip(source_word, translated_word)
+
+def get_result(result_tuple):
+    print ("========================")
+    for s_word, t_word in result_tuple:
+        print(f'{s_word}')
+        print(f'{t_word}')
+    print ("========================")
+
+def get_url_encoded_string(translate_string):
+    return quote(translate_string)
+
+def search_word(word):
+    encoded_word = get_url_encoded_string(word)
+    soup = get_page_source(encoded_word)
+    result_tuple = parse_page_source(soup)
+    get_result(result_tuple)
 
 def save_word_list(file_path, word_list):
     with open(file_path, "a") as f:
@@ -38,6 +76,7 @@ def add_word_list(file_path):
     try:
         while True:
             word = input("Input a word : ")
+            search_word(word)
             explanation = input("Input a explation : ")
             word_list[word] = explanation
     except KeyboardInterrupt:
