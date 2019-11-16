@@ -87,7 +87,9 @@ def add_word_list(file_path):
             word = input("Input a word : ")
             search_word(word)
             explanation = input("Input a explation : ")
-            word_list[word] = explanation
+
+            if word.strip() and explanation.strip():
+                word_list[word] = explanation
     except KeyboardInterrupt:
         print ("Quit the program")
     finally:
