@@ -104,6 +104,9 @@ def word_test(word_list_dic, reverse, practice_mode):
 
     try:
         for i, word in enumerate(words):
+            if i == 100:
+                raise KeyboardInterrupt()
+
             print ("===========")
             print (f"{i+1}. {word_list_dic[word] if reverse else word}")
             user_input = input()
